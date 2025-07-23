@@ -1,0 +1,9 @@
+name: Teste Simples
+
+on: [push]
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Workflow rodando normalmente."
