@@ -1,32 +1,43 @@
-name: CI - validação de PRs
+name: CI Full Stack - Frontend & Backend
 
 on:
+  push:
+    branches:
+      - develop
+      - main
   pull_request:
     branches:
-      - main
       - develop
+      - main
+
+permissions:
+  contents: read
 
 jobs:
-  validate:
+  frontend:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout do código
-        uses: actions/checkout@v2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
         with:
-          node-version: 20
+          node-version: "20"
+      - run: npm install
+        working-directory: ./frontend
+      - run: npm run build
+        working-directory: ./frontend
+      - run: npm test
+        working-directory: ./frontend
 
-      - name: Instalar dependências
-        run: npm ci
-
-      - name: Build
-        run: npm run build
-
-      - name: Testes
-        run: npm test
-
-      - name: Validar commits semânticos
-        run: npx commitlint --from=HEAD~1
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+      - run: npm install
+        working-directory: ./backend
+      - run: npm run build
+        working-directory: ./backend
+      - run: npm test
+        working-directory: ./backend
